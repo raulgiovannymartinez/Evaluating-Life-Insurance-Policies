@@ -1,7 +1,5 @@
 # Evaluating-Life-Insurance-Policies
 
-Narrative
-
 We would like to have an automated system that can evaluate life insurance policies. A life insurance policy, or simply policy, can have one holder (or insured), and has the properties defined in the policy worksheet.
 
 A policy can have two payment schedules: DB and Premiums. The schedules are two time-series with year as unit and they represent future dollar amounts. You can find the DB and Premiums in their respective spreadsheets.
