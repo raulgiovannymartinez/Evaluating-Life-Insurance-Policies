@@ -1,0 +1,54 @@
+Parameters:
+- Duration (integer values from 1 to 125)
+- Gender (Male or Female)
+- Age (integer values from 0 to 125)
+- Policy ID
+- Policy Number
+
+
+Questions:
+- What does this Age vs. Duration Matrix mean? How is computed?
+- Why index of duration starts at 1 in Survival sheet and at 0 in Value sheet?
+- What is qx and qx Adj (what does the scaling by 0.01 and AverageSevetity mean?)?
+- What is CF? (Cash Flow)
+- Do we want to use year or duration for survival curve? Is there a difference?
+	In real life duration is normally months
+	survival curve: average survival for person
+	Median life expectancy when px reaches 0.5
+- When finding the total value of all policies: does this include all years from 2020 to 2060? Is the policy termination for cash flow defined with the zeros under DB and Premiums?
+- Can you tell me a little bit more about the interface requirements? 
+- Everything can be done with dataframes but wanted to check. What data structures does your team like to use? Are more appropiate to problems?
+- What are the channels of visualization and visual encodings? (i.e. line chart for survival curve? Treemap to see total value comparisons for all policies?)
+
+
+Definitions:
+	1) px = survival probabilities
+	2) qx = mortality probabilities
+
+
+Data Structures:
+- Ordered dictionary for holding policy ID info
+
+
+Notes:
+- Survival sheet values: mortality rate values
+
+
+Formulas: 
+	1) qx Adj -> min(1, qx*0.01*AverageSeverity)
+	2) px = 1 - qx Adj 
+	3) tpx[i] = px[i] * tpx[i-1], where i > 0 and px[0]=tpx[0]
+	3) Prob DB = (1 - tpx) * DB
+	4) Prob Prem = Premium * tpx
+	5) Fees = px*1000 + (500*px if duration < 5 else 0)
+	6) CF with fees = Prob DB - Prob Prem - Fees
+	7) Net present value = (cash flow/(1+i)^t) - initial investment, where i = discount rate and t = number of time periods
+
+
+Calculations done by the application
+	1) Survival Curve -> tpx vs. Time (year or duration)
+		- Per individual
+		- Parameters: px, qx Adj, qx, Age, Gender, Duration, Survival value
+	2) Total Cashflow
+		- Option to include and exclude fees
+	3) Total Value of all policies
